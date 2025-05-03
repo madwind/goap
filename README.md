@@ -1,8 +1,8 @@
-# simple_gdscript_formatter
+## Goal Oriented Action Planning
+It is not complete and not suitable for production use.
 
-### Format GDScript (`Ctrl + Alt + L`)
-*no Python dependencies*  
+viewer
+![viewer](https://raw.githubusercontent.com/madwind/goap/master/viewer.png)
 
-### Open in External Editor (`Ctrl + E`)
-*Bypasses the "Use External Editor" setting*  
-Opens the current file in your configured external editor (Rider/VS Code/etc.) without enabling `text_editor/external/use_external_editor` in Godot settings.
+runtime
+![runtime_viewer](https://raw.githubusercontent.com/madwind/goap/master/runtime_viewer.png)
