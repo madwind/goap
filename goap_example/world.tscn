@@ -1,0 +1,84 @@
+[gd_scene load_steps=11 format=3 uid="uid://ox234coc43h3"]
+
+[ext_resource type="PackedScene" uid="uid://6vtt7k1riagu" path="res://goap_example/enemy/enemy.tscn" id="1_yem5u"]
+[ext_resource type="PackedScene" uid="uid://bc8jinjqeernr" path="res://goap_example/player/player.tscn" id="2_lupes"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_yem5u"]
+sky_horizon_color = Color(0.662243, 0.671743, 0.686743, 1)
+ground_horizon_color = Color(0.662243, 0.671743, 0.686743, 1)
+
+[sub_resource type="Sky" id="Sky_lupes"]
+sky_material = SubResource("ProceduralSkyMaterial_yem5u")
+
+[sub_resource type="Environment" id="Environment_18osm"]
+background_mode = 2
+sky = SubResource("Sky_lupes")
+tonemap_mode = 2
+glow_enabled = true
+
+[sub_resource type="NavigationMesh" id="NavigationMesh_lupes"]
+vertices = PackedVector3Array(-24.5, 0.5, -25.5233, -24.5, 0.5, 23.4767, 24.5, 0.5, 23.4767, 24.5, 0.5, -25.5233)
+polygons = [PackedInt32Array(3, 2, 0), PackedInt32Array(0, 2, 1)]
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_lupes"]
+size = Vector2(50, 50)
+
+[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_yem5u"]
+points = PackedVector3Array(-25, 0, -25, -25, 0, 25, 25, 0, -25, 25, 0, 25)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_lupes"]
+top_radius = 0.1
+bottom_radius = 0.1
+
+[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_18osm"]
+points = PackedVector3Array(-0.1, -1, 0, -0.0995302, -1, -0.00980815, -0.0995302, -1, 0.00978857, -0.1, 1, 0, -0.0980814, -1, -0.0195184, -0.0995302, 1, -0.00980815, -0.0980814, -1, 0.0194988, -0.0995302, 1, 0.00978857, -0.0957126, -1, -0.0290329, -0.0980814, 1, -0.0195184, -0.0957126, -1, 0.0290133, -0.0980814, 1, 0.0194988, -0.0924041, -1, -0.0382733, -0.0957126, 1, -0.0290329, -0.0924041, -1, 0.0382537, -0.0957126, 1, 0.0290133, -0.088195, -1, -0.0471417, -0.0924041, 1, -0.0382733, -0.088195, -1, 0.0471222, -0.0924041, 1, 0.0382537, -0.0831637, -1, -0.0555599, -0.088195, 1, -0.0471417, -0.0831637, -1, 0.0555403, -0.088195, 1, 0.0471222, -0.0773101, -1, -0.0634495, -0.0831637, 1, -0.0555599, -0.0773101, -1, 0.0634299, -0.0831637, 1, 0.0555403, -0.0707126, -1, -0.0707126, -0.0773101, 1, -0.0634495, -0.0707126, -1, 0.070693, -0.0773101, 1, 0.0634299, -0.0634495, -1, -0.0773101, -0.0707126, 1, -0.0707126, -0.0634495, -1, 0.0772905, -0.0707126, 1, 0.070693, -0.0555599, -1, -0.0831637, -0.0634495, 1, -0.0773101, -0.0555599, -1, 0.0831441, -0.0634495, 1, 0.0772905, -0.0471417, -1, -0.088195, -0.0555599, 1, -0.0831637, -0.0471417, -1, 0.0881754, -0.0555599, 1, 0.0831441, -0.0382733, -1, -0.0924041, -0.0471417, 1, -0.088195, -0.0382733, -1, 0.0923845, -0.0471417, 1, 0.0881754, -0.0290329, -1, -0.0957126, -0.0382733, 1, -0.0924041, -0.0290329, -1, 0.095693, -0.0382733, 1, 0.0923845, -0.0195184, -1, -0.0980814, -0.0290329, 1, -0.0957126, -0.0195184, -1, 0.0980619, -0.0290329, 1, 0.095693, -0.00980815, -1, -0.0995302, -0.0195184, 1, -0.0980814, -0.00980815, -1, 0.0995106, -0.0195184, 1, 0.0980619, 0, -1, -0.1, -0.00980815, 1, -0.0995302, 0, -1, 0.1, -0.00980815, 1, 0.0995106, 0.00978857, -1, -0.0995302, 0, 1, -0.1, 0.00978857, -1, 0.0995106, 0, 1, 0.1, 0.0194988, -1, -0.0980814, 0.00978857, 1, -0.0995302, 0.0194988, -1, 0.0980619, 0.00978857, 1, 0.0995106, 0.0290133, -1, -0.0957126, 0.0194988, 1, -0.0980814, 0.0290133, -1, 0.095693, 0.0194988, 1, 0.0980619, 0.0382537, -1, -0.0924041, 0.0290133, 1, -0.0957126, 0.0382537, -1, 0.0923845, 0.0290133, 1, 0.095693, 0.0471222, -1, -0.088195, 0.0382537, 1, -0.0924041, 0.0471222, -1, 0.0881754, 0.0382537, 1, 0.0923845, 0.0555403, -1, -0.0831637, 0.0471222, 1, -0.088195, 0.0555403, -1, 0.0831441, 0.0471222, 1, 0.0881754, 0.0634299, -1, -0.0773101, 0.0555403, 1, -0.0831637, 0.0634299, -1, 0.0772905, 0.0555403, 1, 0.0831441, 0.070693, -1, -0.0707126, 0.0634299, 1, -0.0773101, 0.070693, -1, 0.070693, 0.0634299, 1, 0.0772905, 0.0772905, -1, -0.0634495, 0.070693, 1, -0.0707126, 0.0772905, -1, 0.0634299, 0.070693, 1, 0.070693, 0.0831441, -1, -0.0555599, 0.0772905, 1, -0.0634495, 0.0831441, -1, 0.0555403, 0.0772905, 1, 0.0634299, 0.0881754, -1, -0.0471417, 0.0831441, 1, -0.0555599, 0.0881754, -1, 0.0471222, 0.0831441, 1, 0.0555403, 0.0923845, -1, -0.0382733, 0.0881754, 1, -0.0471417, 0.0923845, -1, 0.0382537, 0.0881754, 1, 0.0471222, 0.095693, -1, -0.0290329, 0.0923845, 1, -0.0382733, 0.095693, -1, 0.0290133, 0.0923845, 1, 0.0382537, 0.0980619, -1, -0.0195184, 0.095693, 1, -0.0290329, 0.0980619, -1, 0.0194988, 0.095693, 1, 0.0290133, 0.0995106, -1, -0.00980815, 0.0980619, 1, -0.0195184, 0.0995106, -1, 0.00978857, 0.0980619, 1, 0.0194988, 0.1, -1, 0, 0.0995106, 1, -0.00980815, 0.0995106, 1, 0.00978857, 0.1, 1, 0)
+
+[node name="World" type="Node3D"]
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-0.866023, -0.433016, 0.250001, 0, 0.499998, 0.866027, -0.500003, 0.749999, -0.43301, 0, 0, 0)
+light_color = Color(0.4553, 0.4553, 0.4553, 1)
+shadow_enabled = true
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_18osm")
+
+[node name="Enemy" parent="." instance=ExtResource("1_yem5u")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -9.99424)
+collision_layer = 2
+collision_mask = 8
+
+[node name="Player" parent="." instance=ExtResource("2_lupes")]
+collision_mask = 8
+
+[node name="NavigationRegion3D" type="NavigationRegion3D" parent="."]
+navigation_mesh = SubResource("NavigationMesh_lupes")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="NavigationRegion3D"]
+collision_layer = 8
+collision_mask = 0
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="NavigationRegion3D/StaticBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.02334)
+mesh = SubResource("PlaneMesh_lupes")
+skeleton = NodePath("../../..")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/StaticBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.02334)
+shape = SubResource("ConvexPolygonShape3D_yem5u")
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.5, 0.866025, 0, -0.866025, 0.5, 0, 10, 0)
+
+[node name="Stick" type="StaticBody3D" parent="." groups=["weapon"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10.9746, 0, -7.49552)
+collision_layer = 4
+collision_mask = 8
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Stick"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+mesh = SubResource("CylinderMesh_lupes")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Stick"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+shape = SubResource("ConvexPolygonShape3D_18osm")

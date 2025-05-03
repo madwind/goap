@@ -1,0 +1,2 @@
+class_name GoapActor
+extends CharacterBody3D

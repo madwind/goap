@@ -1,0 +1,55 @@
+[gd_scene load_steps=8 format=3 uid="uid://6vtt7k1riagu"]
+
+[ext_resource type="Script" uid="uid://85ebnm83yviv" path="res://goap_example/enemy/enemy.gd" id="1_bkcfe"]
+[ext_resource type="Script" uid="uid://cswux74tcyhw0" path="res://goap_example/enemy/goap/enemy_agent.gd" id="2_bkcfe"]
+[ext_resource type="Script" uid="uid://bcyimi7o0jaf" path="res://addons/goap/core/perception/goap_vision_cone_3d.gd" id="3_bkcfe"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_18osm"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_836ma"]
+albedo_color = Color(1, 0.427451, 1, 1)
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_lupes"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_cqlqv"]
+radius = 15.0
+
+[node name="Enemy" type="CharacterBody3D"]
+script = ExtResource("1_bkcfe")
+metadata/_custom_type_script = "uid://cimc25xms5jrg"
+
+[node name="GoapAgent" type="Node" parent="." node_paths=PackedStringArray("navigation_agent")]
+script = ExtResource("2_bkcfe")
+goap_script_folder = "res://goap_example/enemy/goap"
+navigation_agent = NodePath("../NavigationAgent3D")
+metadata/_custom_type_script = "uid://b7rhmggpl2vf1"
+
+[node name="GoapVisionCone3D" type="Node3D" parent="GoapAgent" node_paths=PackedStringArray("perception_area", "vision_cone_bone")]
+script = ExtResource("3_bkcfe")
+distance = 20.0
+fov_angle = 360.0
+perception_area = NodePath("../../Area3D")
+vision_cone_bone = NodePath("../../Marker3D")
+target_mask = 15
+metadata/_custom_type_script = "uid://bcyimi7o0jaf"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+shape = SubResource("CapsuleShape3D_18osm")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+material_override = SubResource("StandardMaterial3D_836ma")
+mesh = SubResource("CapsuleMesh_lupes")
+
+[node name="Area3D" type="Area3D" parent="."]
+collision_layer = 0
+collision_mask = 15
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D"]
+shape = SubResource("SphereShape3D_cqlqv")
+
+[node name="Marker3D" type="Marker3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5946, 0)
+
+[node name="NavigationAgent3D" type="NavigationAgent3D" parent="."]

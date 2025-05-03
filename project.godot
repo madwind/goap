@@ -1,0 +1,31 @@
+; Engine configuration file.
+; It's best edited using the editor UI and not directly,
+; since the parameters that go here are not all obvious.
+;
+; Format:
+;   [section] ; section goes between []
+;   param=value ; assign values to parameters
+
+config_version=5
+
+[application]
+
+config/name="goap"
+run/main_scene="uid://ox234coc43h3"
+config/features=PackedStringArray("4.4", "Forward Plus")
+config/icon="uid://dcov2mkvh7jqk"
+
+[autoload]
+
+GoapInspector="*res://addons/goap/debugger/goap_debugger_autoload.gd"
+
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/goap/plugin.cfg")
+
+[layer_names]
+
+3d_physics/layer_1="player"
+3d_physics/layer_2="enemy"
+3d_physics/layer_3="weapon"
+3d_physics/layer_4="land"
