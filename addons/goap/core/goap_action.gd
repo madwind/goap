@@ -6,16 +6,7 @@ var effects := _get_effects()
 
 
 func _get_name() -> StringName:
-	return "ROOT"
-
-
-func is_valid(_agent: GoapAgent) -> bool:
-	return true
-
-
-@warning_ignore("unused_parameter")
-func get_cost(agent: GoapAgent, state: GoapWorldState) -> float:
-	return 0.0
+	return "UNNAMED"
 
 
 func _get_preconditions() -> GoapWorldState:
@@ -26,8 +17,18 @@ func _get_effects() -> GoapWorldState:
 	return GoapWorldState.new()
 
 
-func perform(_agent: GoapAgent, _delta: float) -> bool:
+@warning_ignore("unused_parameter")
+func is_valid(agent: GoapAgent) -> bool:
 	return true
+
+
+@warning_ignore("unused_parameter")
+func get_cost(agent: GoapAgent, state: GoapWorldState) -> float:
+	return 0.0
+
+
+func perform(_agent: GoapAgent, _delta: float) -> bool:
+	return false
 
 
 func _to_string() -> String:

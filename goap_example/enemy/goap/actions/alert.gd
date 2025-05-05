@@ -11,3 +11,7 @@ func get_cost(_agent: GoapAgent, _state: GoapWorldState) -> float:
 
 func _get_effects() -> GoapWorldState:
 	return GoapWorldState.new({WorldStateKey.HAS_ALLY: true})
+
+
+func perform(agent: GoapAgent, delta: float) -> bool:
+	return true

@@ -1,16 +1,16 @@
 extends GoapAgent
 
 
-func _init_world_state() -> void:
-	world_state.merge(GoapWorldState.new({
-		WorldStateKey.HAS_ALLY: false,
-		WorldStateKey.HAS_ENEMY: false,
-		WorldStateKey.HAS_EQUIPPED_WEAPON: false,
-		WorldStateKey.HAS_WEAPON: false
-	}))
+func _init_world_state() -> GoapWorldState:
+	return GoapWorldState.new({
+			WorldStateKey.HAS_ALLY: false,
+			WorldStateKey.HAS_ENEMY: false,
+			WorldStateKey.HAS_EQUIPPED_WEAPON: false,
+			WorldStateKey.HAS_WEAPON: false
+	})
 
 
-func _on_target_changed(body: Node3D) -> void:
+func _on_target_detected(body: Node3D) -> void:
 	if body.is_in_group("player"):
 		var enemies: Array = blackboard.get_or_add(BlackboardKey.ENEMY, [])
 		if not enemies.has(body):
@@ -22,6 +22,8 @@ func _on_target_changed(body: Node3D) -> void:
 		if not weapons.has(body):
 			weapons.append(body)
 			world_state.set_state(WorldStateKey.HAS_WEAPON, true)
+
+
 
 
 func goto(target: Node3D) -> void:

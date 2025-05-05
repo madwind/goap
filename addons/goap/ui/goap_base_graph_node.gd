@@ -34,4 +34,8 @@ func new_state(key: String, value: bool) -> Control:
 
 
 func set_color(color: Color) -> void:
-	titlebar_stylebox.bg_color = color
+	if is_inside_tree():
+		var tween := get_tree().create_tween()
+		tween.tween_property(titlebar_stylebox, "bg_color", color, 0.2)
+	else:
+		titlebar_stylebox.bg_color = color

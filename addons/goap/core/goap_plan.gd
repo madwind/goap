@@ -1,10 +1,11 @@
 class_name GoapPlan
-var plan_node: GoapPlanNode
 var actions: Array[GoapAction] = []
 var cost := 0.0
 var step := 0
+var plan_node: GoapPlanNode
+var planning_time_ms := 0
 
-signal action_succeed(action: GoapAction, completed: bool)
+signal action_succeed(completed: bool)
 
 
 func _init(plan_node: GoapPlanNode, agent: GoapAgent) -> void:
@@ -19,7 +20,7 @@ func execute(agent: GoapAgent, delta: float) -> bool:
 
 	if actions[step].perform(agent, delta):
 		var completed = step == actions.size() - 1
-		action_succeed.emit(actions[step], completed)
+		action_succeed.emit(completed)
 		agent.world_state.merge(actions[step].effects, completed)
 		step += 1
 	return false

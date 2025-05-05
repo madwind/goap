@@ -2,5 +2,6 @@
 * text=auto eol=lf
 
 /** export-ignore
+/goap-example !export-ignore
 /addons !export-ignore
 /addons/** !export-ignore

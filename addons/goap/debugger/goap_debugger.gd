@@ -40,28 +40,37 @@ func remove_agent(agent: GoapAgent):
 
 func inspect(agent: GoapAgent):
 	if current_agent:
-		current_agent.world_state.state_changed.disconnect(_on_world_state_changed)
+		current_agent.plan_updated.disconnect(_on_plan_updated)
 	current_agent = agent
-	current_agent.world_state.state_changed.connect(_on_world_state_changed)
-
+	current_agent.plan_updated.connect(_on_plan_updated)
 	build_tree()
 	build_world_state()
 
 
-func _on_world_state_changed() -> void:
+func _on_plan_updated() -> void:
+	if current_agent._current_plan:
+		if current_plan:
+			current_plan.action_succeed.disconnect(_on_action_succeed)
+		current_plan = current_agent._current_plan
+		current_plan.action_succeed.connect(_on_action_succeed)
 	current_world_state = current_agent.world_state.duplicate()
 	build_tree()
 	build_world_state()
 
 
-func _on_action_succeed(action: GoapAction, completed: bool) -> void:
+func _on_action_succeed(completed: bool) -> void:
+	var action = current_plan.actions[current_plan.step]
 	logger("Action: %s succeed" % action.name)
-	var action_nodes := edit_children.filter(func(node: GoapBaseGraphNode) -> bool: return node.title == action.name)
-	if action_nodes.size() > 0:
-		action_nodes[0].set_color(GoapTheme.COLOR_SUCCESS)
+	var index := edit_children.find_custom(func(node: GoapBaseGraphNode) -> bool: return node.title == action.name)
+	if index != -1:
+		edit_children[index].set_color(GoapTheme.COLOR_SUCCESS)
 	if not completed:
 		current_world_state.merge(action.effects)
 		build_world_state()
+		var next_action = current_plan.actions[current_plan.step + 1]
+		var next_index := edit_children.find_custom(func(node: GoapBaseGraphNode) -> bool: return node.title == next_action.name)
+		if next_index != -1:
+			edit_children[next_index].set_color(GoapTheme.COLOR_RUNNING)
 	else:
 		logger("Goal: %s succeed" % current_goal.name)
 
@@ -70,34 +79,32 @@ func build_tree() -> void:
 	for child in edit_children:
 		graph_edit.remove_child(child)
 	edit_children.clear()
-	if current_agent._current_plan:
-		if current_plan:
-			current_plan.action_succeed.disconnect(_on_action_succeed)
-		current_plan = current_agent._current_plan
-		current_plan.action_succeed.connect(_on_action_succeed)
+	if current_plan:
 		extra_plan(current_plan.plan_node)
 	graph_edit.arrange_nodes()
 
 
 func extra_plan(plan_node: GoapPlanNode, next_node: GoapBaseGraphNode = null):
-		if plan_node.goal:
-			current_goal = plan_node.goal
-			logger("New plan: Goal: %s , Actions: %s" % [current_goal.name, str(current_plan.actions)])
-			var goal_graph_node := GoapGoalGraphNode.new(current_goal)
-			goal_graph_node.set_color(GoapTheme.COLOR_ACTIVE)
-			add_and_record(goal_graph_node)
-			if next_node:
-				graph_edit.connect_node(goal_graph_node.name, 0, next_node.name, 0)
-			return
-		var action_node := GoapActionGraphNode.new(plan_node.action, plan_node.remaining_goals)
-		action_node.set_color(GoapTheme.COLOR_RUNNING)
-		add_and_record(action_node)
+	if plan_node.goal:
+		current_goal = plan_node.goal
+		logger("New plan: Goal: %s, Actions: %s, Planning Time(ms): %d" % [current_goal.name, str(current_plan.actions), current_plan.planning_time_ms])
+		var goal_graph_node := GoapGoalGraphNode.new(current_goal)
+		goal_graph_node.set_color(GoapTheme.COLOR_ACTIVE)
+		add_and_record(goal_graph_node)
 		if next_node:
-			graph_edit.connect_node(action_node.name, 0, next_node.name, 0)
-		elif action_node.get_output_port_count() > 0:
+			graph_edit.connect_node(goal_graph_node.name, 0, next_node.name, 0)
+		return
+	var action_node := GoapActionGraphNode.new(plan_node.action, plan_node.unmet_goals)
+	action_node.set_color(GoapTheme.COLOR_PENDING)
+	add_and_record(action_node)
+	if next_node:
+		graph_edit.connect_node(action_node.name, 0, next_node.name, 0)
+	else:
+		action_node.set_color(GoapTheme.COLOR_RUNNING)
+		if action_node.get_output_port_count() > 0:
 			action_node.set_slot_enabled_right(action_node.get_output_port_slot(0), false)
-		if plan_node.parent:
-			extra_plan(plan_node.parent, action_node)
+	if plan_node.parent:
+		extra_plan(plan_node.parent, action_node)
 
 
 func build_world_state() -> void:

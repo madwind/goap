@@ -52,7 +52,7 @@ func build_tree(agent: GoapAgent) -> void:
 	graph_nodes.clear()
 
 	var goals := agent.goals
-	var active_gaol = agent._planner.select_best_goal()
+	var active_gaol = agent._planner._select_priority_goal()
 	for goal in goals:
 		var root_node := GoapGoalGraphNode.new(goal)
 		if active_gaol == goal:
@@ -60,7 +60,7 @@ func build_tree(agent: GoapAgent) -> void:
 		add_and_record(root_node)
 		var valid_plan_nodes: Array[GoapPlanNode] = []
 		var invalid_plan_nodes: Array[GoapPlanNode] = []
-		agent._planner.get_plan_from_goal(goal, valid_plan_nodes, invalid_plan_nodes)
+		agent._planner._expand_goal_plan(goal, valid_plan_nodes, invalid_plan_nodes)
 		process_plan_nodes(valid_plan_nodes, agent, GoapTheme.COLOR_SUCCESS)
 		process_plan_nodes(invalid_plan_nodes, agent, GoapTheme.COLOR_FAILED)
 	graph_edit.arrange_nodes()
@@ -69,7 +69,7 @@ func build_tree(agent: GoapAgent) -> void:
 func process_plan_nodes(plan_nodes: Array[GoapPlanNode], agent: GoapAgent, color: Color) -> void:
 	for plan_node in plan_nodes:
 		var unsatisfied_node: GoapUnsatisfiedStateGraphNode = null
-		var remaining_goals := agent.world_state.get_unsatisfied_goals(plan_node.remaining_goals)
+		var remaining_goals := agent.world_state.get_unsatisfied_goals(plan_node.unmet_goals)
 		if remaining_goals.size() > 0:
 			unsatisfied_node = GoapUnsatisfiedStateGraphNode.new(remaining_goals)
 			add_and_record(unsatisfied_node)
@@ -85,7 +85,7 @@ func extra_plan(plan_node: GoapPlanNode, next_node: GoapBaseGraphNode, color: Co
 					goal_graph_node.set_color(GoapTheme.COLOR_SUCCESS)
 				graph_edit.connect_node(goal_graph_node.name, 0, next_node.name, 0)
 			return
-		var action_node := GoapActionGraphNode.new(plan_node.action, plan_node.remaining_goals)
+		var action_node := GoapActionGraphNode.new(plan_node.action, plan_node.unmet_goals)
 		action_node.set_color(color)
 		add_and_record(action_node)
 		if next_node:
