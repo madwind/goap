@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=3 uid="uid://y8icyprx62om"]
+[gd_scene load_steps=3 format=3 uid="uid://y8icyprx62om"]
 
-[ext_resource type="Script" uid="uid://d1pfudp2n2462" path="res://addons/goap/debugger/goap_debugger.gd" id="1_el152"]
+[ext_resource type="Script" path="res://addons/goap/debugger/goap_debugger.gd" id="1_el152"]
+[ext_resource type="Script" path="res://addons/goap/ui/goap_plan_browser.gd" id="2_browser"]
 
 [node name="GoapDebugger" type="VSplitContainer"]
 anchors_preset = 15
@@ -11,28 +12,28 @@ grow_vertical = 2
 drag_area_margin_begin = 10
 script = ExtResource("1_el152")
 
-[node name="Panel" type="Panel" parent="."]
+[node name="Panel" type="HSplitContainer" parent="."]
+custom_minimum_size = Vector2(0, 360)
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="GraphEdit" type="GraphEdit" parent="Panel"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
+[node name="Plan" type="VBoxContainer" parent="Panel"]
+layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
+[node name="Toolbar" type="HBoxContainer" parent="Panel/Plan"]
+layout_mode = 2
+
+[node name="PlanBrowser" type="VBoxContainer" parent="Panel/Plan"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+script = ExtResource("2_browser")
+
 [node name="PanelContainer" type="PanelContainer" parent="Panel"]
-layout_mode = 1
-anchors_preset = 1
-anchor_left = 1.0
-anchor_right = 1.0
-offset_left = -20.0
-offset_bottom = 20.0
-grow_horizontal = 0
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 2
 
 [node name="MarginContainer" type="MarginContainer" parent="Panel/PanelContainer"]
 layout_mode = 2
@@ -41,12 +42,29 @@ theme_override_constants/margin_top = 10
 theme_override_constants/margin_right = 10
 theme_override_constants/margin_bottom = 10
 
-[node name="WorldStateContainer" type="VBoxContainer" parent="Panel/PanelContainer/MarginContainer"]
+[node name="Tabs" type="TabContainer" parent="Panel/PanelContainer/MarginContainer"]
 layout_mode = 2
 
-[node name="Panel2" type="Panel" parent="."]
+[node name="Details" type="ScrollContainer" parent="Panel/PanelContainer/MarginContainer/Tabs"]
 layout_mode = 2
-size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="Inspector" type="VBoxContainer" parent="Panel/PanelContainer/MarginContainer/Tabs/Details"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 12
+
+[node name="World facts" type="ScrollContainer" parent="Panel/PanelContainer/MarginContainer/Tabs"]
+layout_mode = 2
+horizontal_scroll_mode = 0
+
+[node name="WorldStateContainer" type="VBoxContainer" parent="Panel/PanelContainer/MarginContainer/Tabs/World facts"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Panel2" type="Panel" parent="."]
+custom_minimum_size = Vector2(0, 110)
+layout_mode = 2
 
 [node name="TextEdit" type="TextEdit" parent="Panel2"]
 layout_mode = 1

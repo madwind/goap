@@ -1,0 +1,131 @@
+[gd_scene format=3 uid="uid://6vtt7k1riagu"]
+
+[ext_resource type="Script" uid="uid://b0w0cu8kiyund" path="res://goap_example/agent/agent.gd" id="1"]
+[ext_resource type="Script" uid="uid://7bde1yuhbbhk" path="res://goap_example/agent/goap/agent.gd" id="2"]
+[ext_resource type="Script" uid="uid://cvj07bo05h0wf" path="res://goap_example/agent/goap/actor_state_provider.gd" id="3_state"]
+[ext_resource type="Script" uid="uid://w3p81i6106ns" path="res://goap_example/survival/fact_keys.gd" id="4_facts"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_836ma"]
+albedo_color = Color(0.93333334, 0.70980394, 0.40784314, 1)
+roughness = 0.85
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_bkcfe"]
+radius = 0.42
+height = 1.6
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_cqlqv"]
+albedo_color = Color(0.7294118, 0.5176471, 0.2901961, 1)
+roughness = 0.85
+
+[sub_resource type="CylinderMesh" id="AxeHandle"]
+top_radius = 0.055
+bottom_radius = 0.055
+height = 1.0
+
+[sub_resource type="StandardMaterial3D" id="AxeStone"]
+albedo_color = Color(0.49, 0.58, 0.65, 1)
+roughness = 0.9
+
+[sub_resource type="BoxMesh" id="AxeHead"]
+size = Vector3(0.52, 0.25, 0.18)
+
+[sub_resource type="BoxMesh" id="AxeEdge"]
+size = Vector3(0.16, 0.34, 0.2)
+
+[sub_resource type="StandardMaterial3D" id="AxeRope"]
+albedo_color = Color(0.78, 0.67, 0.43, 1)
+
+[sub_resource type="CylinderMesh" id="AxeBinding"]
+top_radius = 0.09
+bottom_radius = 0.09
+height = 0.07
+
+[sub_resource type="TorusMesh" id="TorusMesh_3r6va"]
+inner_radius = 0.865
+outer_radius = 0.935
+ring_segments = 6
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_4oujn"]
+radius = 0.65
+height = 1.6
+
+[sub_resource type="StandardMaterial3D" id="DeathMaterial"]
+shading_mode = 0
+albedo_color = Color(0.9, 0.93, 0.96, 1)
+
+[sub_resource type="BoxMesh" id="DeathCrossHorizontal"]
+size = Vector3(1.1, 0.1, 0.22)
+
+[sub_resource type="BoxMesh" id="DeathCrossVertical"]
+size = Vector3(0.22, 0.1, 1.1)
+
+[node name="Agent" type="CharacterBody3D" unique_id=1878365408]
+collision_layer = 2
+collision_mask = 7
+script = ExtResource("1")
+
+[node name="WorldStateProvider" type="Node" parent="." unique_id=1161925668]
+script = ExtResource("3_state")
+
+[node name="GoapAgent" type="Node" parent="." unique_id=1632053525]
+script = ExtResource("2")
+goap_script_folder = "res://goap_example/agent/goap"
+max_planning_nodes = 64
+fact_key_script = ExtResource("4_facts")
+
+[node name="Body" type="MeshInstance3D" parent="." unique_id=1565588350]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8, 0)
+material_override = SubResource("StandardMaterial3D_836ma")
+mesh = SubResource("CapsuleMesh_bkcfe")
+
+[node name="Weapon" type="Node3D" parent="." unique_id=946852908]
+visible = false
+
+[node name="CarriedGoods" type="Node3D" parent="."]
+
+[node name="Handle" type="MeshInstance3D" parent="Weapon" unique_id=1431795242]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.58, 0.85, 0)
+material_override = SubResource("StandardMaterial3D_cqlqv")
+mesh = SubResource("AxeHandle")
+
+[node name="StoneHead" type="MeshInstance3D" parent="Weapon" unique_id=263336988]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.58, 1.3, 0)
+material_override = SubResource("AxeStone")
+mesh = SubResource("AxeHead")
+
+[node name="BladeEdge" type="MeshInstance3D" parent="Weapon" unique_id=1920981086]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.9, 1.3, 0)
+material_override = SubResource("AxeStone")
+mesh = SubResource("AxeEdge")
+
+[node name="UpperBinding" type="MeshInstance3D" parent="Weapon" unique_id=308428608]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.58, 1.17, 0)
+material_override = SubResource("AxeRope")
+mesh = SubResource("AxeBinding")
+
+[node name="LowerBinding" type="MeshInstance3D" parent="Weapon" unique_id=570104260]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.58, 0.72, 0)
+material_override = SubResource("AxeRope")
+mesh = SubResource("AxeBinding")
+
+[node name="AlertRing" type="MeshInstance3D" parent="." unique_id=1253157836]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.04, 0)
+visible = false
+material_override = SubResource("StandardMaterial3D_cqlqv")
+mesh = SubResource("TorusMesh_3r6va")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1005976776]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8, 0)
+shape = SubResource("CapsuleShape3D_4oujn")
+
+[node name="DeathMarker" type="Node3D" parent="." unique_id=65329817]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, 0)
+visible = false
+
+[node name="Horizontal" type="MeshInstance3D" parent="DeathMarker" unique_id=1456060002]
+material_override = SubResource("DeathMaterial")
+mesh = SubResource("DeathCrossHorizontal")
+
+[node name="Vertical" type="MeshInstance3D" parent="DeathMarker" unique_id=432960842]
+material_override = SubResource("DeathMaterial")
+mesh = SubResource("DeathCrossVertical")

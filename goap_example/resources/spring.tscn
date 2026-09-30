@@ -1,0 +1,51 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://goap_example/resources/resource.gd" id="1"]
+[ext_resource type="Script" path="res://goap_example/resources/item_definition.gd" id="2"]
+[ext_resource type="Resource" path="res://goap_example/resources/water.tres" id="3"]
+[ext_resource type="Script" path="res://goap_example/resources/resource_state_provider.gd" id="4"]
+
+[sub_resource type="StandardMaterial3D" id="WaterMaterial"]
+albedo_color = Color(0.22, 0.64, 0.87, 1)
+roughness = 0.25
+
+[sub_resource type="CylinderMesh" id="PoolMesh"]
+top_radius = 1.0
+bottom_radius = 0.85
+height = 0.15
+
+[sub_resource type="CylinderShape3D" id="Collision"]
+radius = 0.9
+height = 0.15
+
+[node name="Spring" type="Node3D"]
+script = ExtResource("1")
+kind = &"spring"
+harvest_method = &"collect"
+drops = Array[ExtResource("2")]([ExtResource("3")])
+
+[node name="WorldStateProvider" type="Node" parent="."]
+script = ExtResource("4")
+
+[node name="Visual" type="Node3D" parent="."]
+
+[node name="Collider" type="StaticBody3D" parent="."]
+collision_mask = 0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Collider"]
+position = Vector3(0, 0.075, 0)
+shape = SubResource("Collision")
+
+[node name="Pool" type="MeshInstance3D" parent="Visual"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.06, 0)
+material_override = SubResource("WaterMaterial")
+mesh = SubResource("PoolMesh")
+
+[node name="Caption" type="Label3D" parent="."]
+visible = false
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
+pixel_size = 0.012
+billboard = 1
+no_depth_test = true
+font_size = 48
+outline_size = 9

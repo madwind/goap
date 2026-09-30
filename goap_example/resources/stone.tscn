@@ -1,0 +1,63 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://goap_example/resources/resource.gd" id="1"]
+[ext_resource type="Script" path="res://goap_example/resources/item_definition.gd" id="2"]
+[ext_resource type="Resource" path="res://goap_example/resources/stone_item.tres" id="3"]
+[ext_resource type="Script" path="res://goap_example/resources/resource_state_provider.gd" id="4"]
+
+[sub_resource type="StandardMaterial3D" id="RockMaterial"]
+albedo_color = Color(0.47, 0.52, 0.57, 1)
+roughness = 0.95
+
+[sub_resource type="SphereMesh" id="RockMesh"]
+radius = 0.78
+height = 1.56
+
+[sub_resource type="SphereMesh" id="PebbleMesh"]
+radius = 0.32
+height = 0.64
+
+[sub_resource type="SphereShape3D" id="Collision"]
+radius = 0.78
+
+[node name="StoneDeposit" type="Node3D"]
+script = ExtResource("1")
+kind = &"stone"
+harvest_method = &"mine"
+drops = Array[ExtResource("2")]([ExtResource("3")])
+
+[node name="WorldStateProvider" type="Node" parent="."]
+script = ExtResource("4")
+
+[node name="Visual" type="Node3D" parent="."]
+
+[node name="Collider" type="StaticBody3D" parent="."]
+collision_mask = 0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Collider"]
+position = Vector3(0, 0.78, 0)
+shape = SubResource("Collision")
+
+[node name="Rock" type="MeshInstance3D" parent="Visual"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.78, 0)
+material_override = SubResource("RockMaterial")
+mesh = SubResource("RockMesh")
+
+[node name="PebbleLeft" type="MeshInstance3D" parent="Visual"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.72, 0.32, 0.36)
+material_override = SubResource("RockMaterial")
+mesh = SubResource("PebbleMesh")
+
+[node name="PebbleRight" type="MeshInstance3D" parent="Visual"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.67, 0.32, -0.31)
+material_override = SubResource("RockMaterial")
+mesh = SubResource("PebbleMesh")
+
+[node name="Caption" type="Label3D" parent="."]
+visible = false
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.8, 0)
+pixel_size = 0.012
+billboard = 1
+no_depth_test = true
+font_size = 48
+outline_size = 9

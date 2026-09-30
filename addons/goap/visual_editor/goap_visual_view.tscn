@@ -1,19 +1,119 @@
-[gd_scene load_steps=2 format=3 uid="uid://cwwww5kro88bh"]
+[gd_scene load_steps=4 format=3 uid="uid://cwwww5kro88bh"]
 
-[ext_resource type="Script" uid="uid://djwnltlimakuk" path="res://addons/goap/visual_editor/goap_visual_view.gd" id="1_odflm"]
+[ext_resource type="Script" path="res://addons/goap/visual_editor/goap_visual_view.gd" id="1_odflm"]
+[ext_resource type="Script" path="res://addons/goap/ui/goap_plan_browser.gd" id="2_browser"]
+[ext_resource type="Script" path="res://addons/goap/visual_editor/goap_dependency_graph.gd" id="3_graph"]
 
-[node name="GoapVisualizer" type="Control"]
-layout_mode = 3
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
+[node name="GoapVisualizer" type="VBoxContainer"]
+custom_minimum_size = Vector2(0, 320)
 size_flags_horizontal = 3
 size_flags_vertical = 3
 script = ExtResource("1_odflm")
 
-[node name="GraphEdit" type="GraphEdit" parent="."]
+[node name="Header" type="HBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="ModeTabs" type="TabBar" parent="Header"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Window" type="Button" parent="Header"]
+layout_mode = 2
+tooltip_text = "Open GOAP in a separate window."
+
+[node name="Toolbar" type="HBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="AgentLabel" type="Label" parent="Toolbar"]
+layout_mode = 2
+text = "Agent"
+
+[node name="AgentPicker" type="OptionButton" parent="Toolbar"]
+custom_minimum_size = Vector2(180, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Reload" type="Button" parent="Toolbar"]
+layout_mode = 2
+text = "Reload"
+
+[node name="Frame" type="Button" parent="Toolbar"]
+layout_mode = 2
+text = "Frame All"
+
+[node name="Arrange" type="Button" parent="Toolbar"]
+layout_mode = 2
+text = "Arrange"
+tooltip_text = "Arrange dependency branches and route connections around nodes."
+
+[node name="ViewOptions" type="HBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="ViewPicker" type="OptionButton" parent="ViewOptions"]
+layout_mode = 2
+tooltip_text = "Browse execution sequences or shared action dependencies."
+
+[node name="Compact" type="CheckButton" parent="ViewOptions"]
+layout_mode = 2
+text = "Compact"
+tooltip_text = "Show small nodes; select one to inspect its full conditions and effects."
+
+[node name="Status" type="Label" parent="."]
+layout_mode = 2
+text = "Open a scene containing a GoapAgent to preview its plans."
+autowrap_mode = 3
+
+[node name="Content" type="HSplitContainer" parent="."]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="GoalSidebar" type="VBoxContainer" parent="Content"]
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 2
+
+[node name="GoalSearch" type="LineEdit" parent="Content/GoalSidebar"]
+layout_mode = 2
+placeholder_text = "Find goal or ID..."
+clear_button_enabled = true
+
+[node name="GoalList" type="ItemList" parent="Content/GoalSidebar"]
+custom_minimum_size = Vector2(0, 75)
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="GoalSummary" type="Label" parent="Content/GoalSidebar"]
+layout_mode = 2
+text = "Select a goal to preview its plans."
+autowrap_mode = 3
+
+
+[node name="PreviewArea" type="HSplitContainer" parent="Content"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="PlanBrowser" type="VBoxContainer" parent="Content/PreviewArea"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+script = ExtResource("2_browser")
+
+[node name="GraphEdit" type="GraphEdit" parent="Content/PreviewArea"]
+visible = false
+custom_minimum_size = Vector2(360, 220)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+show_grid = false
+show_arrange_button = false
+script = ExtResource("3_graph")
+
+[node name="StatePanel" type="Control" parent="Content/PreviewArea"]
+custom_minimum_size = Vector2(430, 0)
+layout_mode = 2
+clip_contents = true
+
+[node name="Surface" type="PanelContainer" parent="Content/PreviewArea/StatePanel"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -21,21 +121,53 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="PanelContainer" type="PanelContainer" parent="."]
-layout_mode = 1
-anchors_preset = 1
-anchor_left = 1.0
-anchor_right = 1.0
-offset_left = -20.0
-offset_bottom = 20.0
-grow_horizontal = 0
-
-[node name="MarginContainer" type="MarginContainer" parent="PanelContainer"]
+[node name="Margin" type="MarginContainer" parent="Content/PreviewArea/StatePanel/Surface"]
 layout_mode = 2
 theme_override_constants/margin_left = 10
 theme_override_constants/margin_top = 10
 theme_override_constants/margin_right = 10
 theme_override_constants/margin_bottom = 10
 
-[node name="WorldStateContainer" type="VBoxContainer" parent="PanelContainer/MarginContainer"]
+[node name="Tabs" type="TabContainer" parent="Content/PreviewArea/StatePanel/Surface/Margin"]
 layout_mode = 2
+
+[node name="Step details" type="ScrollContainer" parent="Content/PreviewArea/StatePanel/Surface/Margin/Tabs"]
+layout_mode = 2
+horizontal_scroll_mode = 0
+
+[node name="Inspector" type="VBoxContainer" parent="Content/PreviewArea/StatePanel/Surface/Margin/Tabs/Step details"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 12
+
+[node name="World facts" type="VBoxContainer" parent="Content/PreviewArea/StatePanel/Surface/Margin/Tabs"]
+layout_mode = 2
+
+[node name="Filters" type="HBoxContainer" parent="Content/PreviewArea/StatePanel/Surface/Margin/Tabs/World facts"]
+layout_mode = 2
+
+[node name="FactSearch" type="LineEdit" parent="Content/PreviewArea/StatePanel/Surface/Margin/Tabs/World facts/Filters"]
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "Search facts..."
+clear_button_enabled = true
+
+[node name="TrueOnly" type="CheckButton" parent="Content/PreviewArea/StatePanel/Surface/Margin/Tabs/World facts/Filters"]
+layout_mode = 2
+text = "True only"
+tooltip_text = "Show only facts checked True in this preview."
+
+[node name="FactEmpty" type="Label" parent="Content/PreviewArea/StatePanel/Surface/Margin/Tabs/World facts"]
+visible = false
+layout_mode = 2
+text = "No matching facts. Clear the search or turn off True only."
+autowrap_mode = 3
+
+[node name="FactScroll" type="ScrollContainer" parent="Content/PreviewArea/StatePanel/Surface/Margin/Tabs/World facts"]
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="WorldStateContainer" type="VBoxContainer" parent="Content/PreviewArea/StatePanel/Surface/Margin/Tabs/World facts/FactScroll"]
+layout_mode = 2
+size_flags_horizontal = 3

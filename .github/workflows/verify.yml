@@ -1,0 +1,27 @@
+name: GOAP verification
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  windows:
+    runs-on: windows-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Godot 4.7.2
+        shell: pwsh
+        run: |
+          $release = '4.7.2-stable'
+          $name = "Godot_v${release}_win64.exe"
+          $base = "https://github.com/godotengine/godot-builds/releases/download/$release"
+          Invoke-WebRequest "$base/$name.zip" -OutFile "$env:RUNNER_TEMP/godot.zip"
+          Expand-Archive "$env:RUNNER_TEMP/godot.zip" -DestinationPath "$env:RUNNER_TEMP/godot"
+          "GODOT=$env:RUNNER_TEMP/godot/Godot_v${release}_win64_console.exe" >> $env:GITHUB_ENV
+      - name: Run core and example checks
+        shell: pwsh
+        run: ./tests/run_ci.ps1 -Godot $env:GODOT

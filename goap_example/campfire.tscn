@@ -1,0 +1,85 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://goap_example/camp.gd" id="1_camp"]
+[ext_resource type="Script" path="res://goap_example/survival/camp_state_provider.gd" id="2_provider"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_byq4l"]
+albedo_color = Color(0.63529414, 0.6666667, 0.5882353, 1)
+roughness = 0.85
+
+[sub_resource type="TorusMesh" id="TorusMesh_2ublh"]
+inner_radius = 0.965
+outer_radius = 1.035
+ring_segments = 6
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_4t4cy"]
+albedo_color = Color(0.59607846, 0.45490196, 0.32941177, 1)
+roughness = 0.85
+
+[sub_resource type="BoxMesh" id="BoxMesh_mcxoy"]
+size = Vector3(1.25, 0.18, 0.22)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_kr1dt"]
+albedo_color = Color(0.59607846, 0.45490196, 0.32941177, 1)
+roughness = 0.85
+
+[sub_resource type="BoxMesh" id="BoxMesh_0g21s"]
+size = Vector3(1.25, 0.18, 0.22)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_i5nl8"]
+albedo_color = Color(1, 0.67058825, 0.32941177, 1)
+roughness = 0.85
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_llt2q"]
+top_radius = 0.0
+bottom_radius = 0.45
+height = 1.2
+
+[sub_resource type="CylinderShape3D" id="Collision"]
+radius = 0.85
+height = 0.2
+
+[node name="Campfire" type="Node3D" unique_id=796302164]
+script = ExtResource("1_camp")
+scale = Vector3(1.5, 1.5, 1.5)
+metadata/interaction_radius = 3.5
+
+[node name="WorldStateProvider" type="Node" parent="."]
+script = ExtResource("2_provider")
+
+[node name="Collider" type="StaticBody3D" parent="."]
+collision_mask = 0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Collider"]
+position = Vector3(0, 0.1, 0)
+shape = SubResource("Collision")
+
+[node name="Ring" type="MeshInstance3D" parent="." unique_id=166569846]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.04, 0)
+material_override = SubResource("StandardMaterial3D_byq4l")
+mesh = SubResource("TorusMesh_2ublh")
+
+[node name="LogA" type="MeshInstance3D" parent="." unique_id=1854211612]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.12, 0)
+material_override = SubResource("StandardMaterial3D_4t4cy")
+mesh = SubResource("BoxMesh_mcxoy")
+
+[node name="LogB" type="MeshInstance3D" parent="." unique_id=808415168]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 0, 0.12, 0)
+material_override = SubResource("StandardMaterial3D_kr1dt")
+mesh = SubResource("BoxMesh_0g21s")
+
+[node name="Flame" type="MeshInstance3D" parent="." unique_id=1649181638]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.75, 0)
+visible = false
+material_override = SubResource("StandardMaterial3D_i5nl8")
+mesh = SubResource("CylinderMesh_llt2q")
+
+[node name="Caption" type="Label3D" parent="." unique_id=1447723570]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
+pixel_size = 0.012
+billboard = 1
+no_depth_test = true
+text = "Campfire · Unlit"
+font_size = 48
+outline_size = 9

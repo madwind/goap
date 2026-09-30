@@ -1,0 +1,84 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://addons/goap/runtime/goap_performance_monitor.gd" id="1_performance"]
+
+[sub_resource type="StyleBoxFlat" id="Page"]
+content_margin_left = 22.0
+content_margin_top = 22.0
+content_margin_right = 22.0
+content_margin_bottom = 22.0
+bg_color = Color(0.09, 0.12, 0.16, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_left = 8
+corner_radius_bottom_right = 8
+
+[node name="Performance" type="ScrollContainer"]
+layout_mode = 2
+horizontal_scroll_mode = 0
+
+[node name="Performance" type="PanelContainer" parent="."]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("Page")
+
+[node name="Column" type="VBoxContainer" parent="Performance"]
+layout_mode = 2
+theme_override_constants/separation = 14
+script = ExtResource("1_performance")
+
+[node name="Title" type="Label" parent="Performance/Column"]
+layout_mode = 2
+text = "Planning / Performance"
+theme_override_font_sizes/font_size = 24
+theme_override_colors/font_color = Color(0.9, 0.94, 0.98, 1)
+
+
+[node name="Subtitle" type="Label" parent="Performance/Column"]
+layout_mode = 2
+text = "Real-time samples · Independent of simulation speed"
+theme_override_font_sizes/font_size = 14
+theme_override_colors/font_color = Color(0.62, 0.71, 0.8, 1)
+
+
+[node name="Body" type="HBoxContainer" parent="Performance/Column"]
+layout_mode = 2
+theme_override_constants/separation = 14
+
+
+[node name="Settings" type="VBoxContainer" parent="Performance/Column/Body"]
+layout_mode = 2
+theme_override_constants/separation = 14
+custom_minimum_size = Vector2(300, 0)
+
+[node name="Console" type="CheckButton" parent="Performance/Column/Body/Settings"]
+layout_mode = 2
+button_pressed = true
+text = "Log every 2 seconds"
+
+[node name="Note" type="Label" parent="Performance/Column/Body/Settings"]
+layout_mode = 2
+text = "Times in ms, since the last reset.\nAll GOAP agents in this scene tree.\nResponse time includes queueing."
+theme_override_font_sizes/font_size = 13
+theme_override_colors/font_color = Color(0.62, 0.71, 0.8, 1)
+
+
+[node name="Divider" type="VSeparator" parent="Performance/Column/Body"]
+layout_mode = 2
+
+[node name="Results" type="VBoxContainer" parent="Performance/Column/Body"]
+layout_mode = 2
+theme_override_constants/separation = 14
+size_flags_horizontal = 3
+
+[node name="Metrics" type="VBoxContainer" parent="Performance/Column/Body/Results"]
+layout_mode = 2
+theme_override_constants/separation = 14
+
+
+[node name="Reset" type="Button" parent="Performance/Column/Body/Settings"]
+layout_mode = 2
+text = "Reset samples"
+
+[connection signal="pressed" from="Performance/Column/Body/Settings/Reset" to="Performance/Column" method="reset_samples"]

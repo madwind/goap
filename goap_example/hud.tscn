@@ -1,0 +1,581 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://addons/goap/runtime/goap_runtime_monitor.tscn" id="4_monitor"]
+
+[ext_resource type="Script" path="res://goap_example/performance.gd" id="1_performance"]
+
+[ext_resource type="Script" path="res://goap_example/hud.gd" id="2_hud"]
+
+[ext_resource type="Script" path="res://goap_example/map_overlay.gd" id="3_overlay"]
+
+[ext_resource type="Script" path="res://goap_example/overhead_vitals.gd" id="4_overhead"]
+[ext_resource type="Script" path="res://goap_example/world_health_bars.gd" id="5_world_bars"]
+
+[sub_resource type="StyleBoxFlat" id="Page"]
+content_margin_left = 22.0
+content_margin_top = 22.0
+content_margin_right = 22.0
+content_margin_bottom = 22.0
+bg_color = Color(0.09, 0.12, 0.16, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_left = 8
+corner_radius_bottom_right = 8
+
+[sub_resource type="StyleBoxFlat" id="VitalsPanel"]
+content_margin_left = 7.0
+content_margin_top = 4.0
+content_margin_right = 7.0
+content_margin_bottom = 4.0
+bg_color = Color(0.07, 0.11, 0.14, 0.88)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_left = 8
+corner_radius_bottom_right = 8
+
+[node name="HUD" instance=ExtResource("4_monitor")]
+script = ExtResource("2_hud")
+performance_page_path = NodePath("RuntimeWindow/RuntimePanel/Column/Tabs/Performance/Performance/Column")
+show_on_ready = false
+include_inspector_page = false
+
+[node name="Root" type="Control" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Overlay" type="Control" parent="Root"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("3_overlay")
+
+[node name="WorldHealthBars" type="Control" parent="Root"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("5_world_bars")
+
+[node name="Toolbar" type="HBoxContainer" parent="Root"]
+layout_mode = 2
+theme_override_constants/separation = 14
+offset_left = 16.0
+offset_top = 12.0
+
+[node name="Pause" type="Button" parent="Root/Toolbar"]
+layout_mode = 2
+custom_minimum_size = Vector2(88, 0)
+text = "Pause"
+tooltip_text = "Pause or resume the simulation"
+
+[node name="Hint" type="Label" parent="Root/Toolbar"]
+layout_mode = 2
+text = "Independent agents · Resources reserved while in use"
+theme_override_font_sizes/font_size = 14
+theme_override_colors/font_color = Color(0.62, 0.71, 0.8, 1)
+custom_minimum_size = Vector2(100, 0)
+size_flags_horizontal = 3
+text_overrun_behavior = 3
+
+[node name="OverheadVitals" type="PanelContainer" parent="Root"]
+visible = false
+layout_mode = 0
+offset_right = 110.0
+offset_bottom = 32.0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("VitalsPanel")
+script = ExtResource("4_overhead")
+
+[node name="Column" type="VBoxContainer" parent="Root/OverheadVitals"]
+layout_mode = 2
+theme_override_constants/separation = 2
+mouse_filter = 2
+
+[node name="Agent" type="Label" parent="Root/OverheadVitals/Column"]
+layout_mode = 2
+text = "Agent #1"
+theme_override_font_sizes/font_size = 12
+horizontal_alignment = 1
+mouse_filter = 2
+
+[node name="Agent" type="ScrollContainer" parent="RuntimeWindow/RuntimePanel/Column/Tabs"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="Sidebar" type="PanelContainer" parent="RuntimeWindow/RuntimePanel/Column/Tabs/Agent"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("Page")
+
+[node name="Column" type="VBoxContainer" parent="RuntimeWindow/RuntimePanel/Column/Tabs/Agent/Sidebar"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+
+[node name="Title" type="Label" parent="RuntimeWindow/RuntimePanel/Column/Tabs/Agent/Sidebar/Column"]
+layout_mode = 2
+text = "Agent #1"
+theme_override_font_sizes/font_size = 22
+theme_override_colors/font_color = Color(0.9, 0.94, 0.98, 1)
+
+
+[node name="Subtitle" type="Label" parent="RuntimeWindow/RuntimePanel/Column/Tabs/Agent/Sidebar/Column"]
+layout_mode = 2
+text = "Selected character · survival and activity"
+theme_override_font_sizes/font_size = 14
+theme_override_colors/font_color = Color(0.62, 0.71, 0.8, 1)
+autowrap_mode = 3
+
+
+[node name="Selection" type="HBoxContainer" parent="RuntimeWindow/RuntimePanel/Column/Tabs/Agent/Sidebar/Column"]
+layout_mode = 2
+theme_override_constants/separation = 14
+
+
+[node name="Label" type="Label" parent="RuntimeWindow/RuntimePanel/Column/Tabs/Agent/Sidebar/Column/Selection"]
+layout_mode = 2
+text = "Agent #"
+theme_override_font_sizes/font_size = 15
+theme_override_colors/font_color = Color(0.9, 0.94, 0.98, 1)
+
+
+[node name="Index" type="SpinBox" parent="RuntimeWindow/RuntimePanel/Column/Tabs/Agent/Sidebar/Column/Selection"]
+layout_mode = 2
+custom_minimum_size = Vector2(120, 0)
+min_value = 1.0
+max_value = 1.0
+value = 1.0
+
+[node name="Body" type="VBoxContainer" parent="RuntimeWindow/RuntimePanel/Column/Tabs/Agent/Sidebar/Column"]
+layout_mode = 2
+theme_override_constants/separation = 10
+size_flags_vertical = 3
+
+[node name="Overview" type="VBoxContainer" parent="RuntimeWindow/RuntimePanel/Column/Tabs/Agent/Sidebar/Column/Body"]
+layout_mode = 2
+theme_override_constants/separation = 8
+custom_minimum_size = Vector2(280, 0)
+size_flags_horizontal = 3
+
+[node name="Heading" type="Label" parent="RuntimeWindow/RuntimePanel/Column/Tabs/Agent/Sidebar/Column/Body/Overview"]
+layout_mode = 2
+text = "VITALS & INVENTORY"
+theme_override_font_sizes/font_size = 13
+theme_override_colors/font_color = Color(0.62, 0.71, 0.8, 1)
+
+
+[node name="Stats" type="GridContainer" parent="RuntimeWindow/RuntimePanel/Column/Tabs/Agent/Sidebar/Column/Body/Overview"]
+layout_mode = 2
+columns = 4
+theme_override_constants/h_separation = 2
+theme_override_constants/v_separation = 8
+
+[node name="SatietyLabel" type="Label" parent="RuntimeWindow/RuntimePanel/Column/Tabs/Agent/Sidebar/Column/Body/Overview/Stats"]
+layout_mode = 2
+text = "Satiety"
+theme_override_font_sizes/font_size = 14
+theme_override_colors/font_color = Color(0.62, 0.71, 0.8, 1)
+size_flags_horizontal = 3
+
+[node name="Satiety" type="Label" parent="RuntimeWindow/RuntimePanel/Column/Tabs/Agent/Sidebar/Column/Body/Overview/Stats"]
+layout_mode = 2
+text = "60/100"
+theme_override_font_sizes/font_size = 16
+theme_override_colors/font_color = Color(0.9, 0.94, 0.98, 1)
+horizontal_alignment = 2
+
+[node name="HydrationLabel" type="Label" parent="RuntimeWindow/RuntimePanel/Column/Tabs/Agent/Sidebar/Column/Body/Overview/Stats"]
+layout_mode = 2
+text = "Hydration"
+theme_override_font_sizes/font_size = 14
+theme_override_colors/font_color = Color(0.62, 0.71, 0.8, 1)
+size_flags_horizontal = 3
+
+[node name="Hydration" type="Label" parent="RuntimeWindow/RuntimePanel/Column/Tabs/Agent/Sidebar/Column/Body/Overview/Stats"]
+layout_mode = 2
+text = "85/100"
+theme_override_font_sizes/font_size = 16
+theme_override_colors/font_color = Color(0.9, 0.94, 0.98, 1)
+horizontal_alignment = 2
+
+[node name="HealthLabel" type="Label" parent="RuntimeWindow/RuntimePanel/Column/Tabs/Agent/Sidebar/Column/Body/Overview/Stats"]
+layout_mode = 2
+text = "Health"
+theme_override_font_sizes/font_size = 14
+theme_override_colors/font_color = Color(0.62, 0.71, 0.8, 1)
+size_flags_horizontal = 3
+
+[node name="Health" type="Label" parent="RuntimeWindow/RuntimePanel/Column/Tabs/Agent/Sidebar/Column/Body/Overview/Stats"]
+layout_mode = 2
+text = "20/20 HP"
+theme_override_font_sizes/font_size = 16
+theme_override_colors/font_color = Color(0.9, 0.94, 0.98, 1)
+horizontal_alignment = 2
+
+[node name="StateLabel" type="Label" parent="RuntimeWindow/RuntimePanel/Column/Tabs/Agent/Sidebar/Column/Body/Overview/Stats"]
+layout_mode = 2
+text = "Status"
+theme_override_font_sizes/font_size = 14
+theme_override_colors/font_color = Color(0.62, 0.71, 0.8, 1)
+size_flags_horizontal = 3
+
+[node name="State" type="Label" parent="RuntimeWindow/RuntimePanel/Column/Tabs/Agent/Sidebar/Column/Body/Overview/Stats"]
+layout_mode = 2
+text = "Safe"
+theme_override_font_sizes/font_size = 16
+theme_override_colors/font_color = Color(0.9, 0.94, 0.98, 1)
+horizontal_alignment = 2
+
+[node name="RawLabel" type="Label" parent="RuntimeWindow/RuntimePanel/Column/Tabs/Agent/Sidebar/Column/Body/Overview/Stats"]
+layout_mode = 2
+text = "Raw"
+theme_override_font_sizes/font_size = 14
+theme_override_colors/font_color = Color(0.62, 0.71, 0.8, 1)
+size_flags_horizontal = 3
+
+[node name="Raw" type="Label" parent="RuntimeWindow/RuntimePanel/Column/Tabs/Agent/Sidebar/Column/Body/Overview/Stats"]
+layout_mode = 2
+text = "0"
+theme_override_font_sizes/font_size = 16
+theme_override_colors/font_color = Color(0.9, 0.94, 0.98, 1)
+horizontal_alignment = 2
+
+[node name="CookedLabel" type="Label" parent="RuntimeWindow/RuntimePanel/Column/Tabs/Agent/Sidebar/Column/Body/Overview/Stats"]
+layout_mode = 2
+text = "Cooked"
+theme_override_font_sizes/font_size = 14
+theme_override_colors/font_color = Color(0.62, 0.71, 0.8, 1)
+size_flags_horizontal = 3
+
+[node name="Cooked" type="Label" parent="RuntimeWindow/RuntimePanel/Column/Tabs/Agent/Sidebar/Column/Body/Overview/Stats"]
+layout_mode = 2
+text = "0"
+theme_override_font_sizes/font_size = 16
+theme_override_colors/font_color = Color(0.9, 0.94, 0.98, 1)
+horizontal_alignment = 2
+
+[node name="WoodLabel" type="Label" parent="RuntimeWindow/RuntimePanel/Column/Tabs/Agent/Sidebar/Column/Body/Overview/Stats"]
+layout_mode = 2
+text = "Wood"
+theme_override_font_sizes/font_size = 14
+theme_override_colors/font_color = Color(0.62, 0.71, 0.8, 1)
+size_flags_horizontal = 3
+
+[node name="Wood" type="Label" parent="RuntimeWindow/RuntimePanel/Column/Tabs/Agent/Sidebar/Column/Body/Overview/Stats"]
+layout_mode = 2
+text = "0"
+theme_override_font_sizes/font_size = 16
+theme_override_colors/font_color = Color(0.9, 0.94, 0.98, 1)
+horizontal_alignment = 2
+
+[node name="WaterLabel" type="Label" parent="RuntimeWindow/RuntimePanel/Column/Tabs/Agent/Sidebar/Column/Body/Overview/Stats"]
+layout_mode = 2
+text = "Water"
+theme_override_font_sizes/font_size = 14
+theme_override_colors/font_color = Color(0.62, 0.71, 0.8, 1)
+size_flags_horizontal = 3
+
+[node name="Water" type="Label" parent="RuntimeWindow/RuntimePanel/Column/Tabs/Agent/Sidebar/Column/Body/Overview/Stats"]
+layout_mode = 2
+text = "0"
+theme_override_font_sizes/font_size = 16
+theme_override_colors/font_color = Color(0.9, 0.94, 0.98, 1)
+horizontal_alignment = 2
+
+[node name="StoneLabel" type="Label" parent="RuntimeWindow/RuntimePanel/Column/Tabs/Agent/Sidebar/Column/Body/Overview/Stats"]
+layout_mode = 2
+text = "Stone"
+theme_override_font_sizes/font_size = 14
+theme_override_colors/font_color = Color(0.62, 0.71, 0.8, 1)
+size_flags_horizontal = 3
+
+[node name="Stone" type="Label" parent="RuntimeWindow/RuntimePanel/Column/Tabs/Agent/Sidebar/Column/Body/Overview/Stats"]
+layout_mode = 2
+text = "0"
+theme_override_font_sizes/font_size = 16
+theme_override_colors/font_color = Color(0.9, 0.94, 0.98, 1)
+horizontal_alignment = 2
+
+[node name="WeaponLabel" type="Label" parent="RuntimeWindow/RuntimePanel/Column/Tabs/Agent/Sidebar/Column/Body/Overview/Stats"]
+layout_mode = 2
+text = "Axe"
+theme_override_font_sizes/font_size = 14
+theme_override_colors/font_color = Color(0.62, 0.71, 0.8, 1)
+size_flags_horizontal = 3
+
+[node name="Weapon" type="Label" parent="RuntimeWindow/RuntimePanel/Column/Tabs/Agent/Sidebar/Column/Body/Overview/Stats"]
+layout_mode = 2
+text = "0/10"
+theme_override_font_sizes/font_size = 16
+theme_override_colors/font_color = Color(0.9, 0.94, 0.98, 1)
+horizontal_alignment = 2
+
+[node name="MealsLabel" type="Label" parent="RuntimeWindow/RuntimePanel/Column/Tabs/Agent/Sidebar/Column/Body/Overview/Stats"]
+layout_mode = 2
+text = "Meals"
+theme_override_font_sizes/font_size = 14
+theme_override_colors/font_color = Color(0.62, 0.71, 0.8, 1)
+size_flags_horizontal = 3
+
+[node name="Meals" type="Label" parent="RuntimeWindow/RuntimePanel/Column/Tabs/Agent/Sidebar/Column/Body/Overview/Stats"]
+layout_mode = 2
+text = "0"
+theme_override_font_sizes/font_size = 16
+theme_override_colors/font_color = Color(0.9, 0.94, 0.98, 1)
+horizontal_alignment = 2
+
+[node name="Thresholds" type="Label" parent="RuntimeWindow/RuntimePanel/Column/Tabs/Agent/Sidebar/Column/Body/Overview"]
+layout_mode = 2
+text = "Forage at 50 · Starving at 12"
+theme_override_font_sizes/font_size = 13
+theme_override_colors/font_color = Color(0.62, 0.71, 0.8, 1)
+
+
+[node name="Divider" type="HSeparator" parent="RuntimeWindow/RuntimePanel/Column/Tabs/Agent/Sidebar/Column/Body"]
+layout_mode = 2
+
+[node name="Execution" type="VBoxContainer" parent="RuntimeWindow/RuntimePanel/Column/Tabs/Agent/Sidebar/Column/Body"]
+layout_mode = 2
+theme_override_constants/separation = 10
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 1.3
+
+[node name="Planning" type="HBoxContainer" parent="RuntimeWindow/RuntimePanel/Column/Tabs/Agent/Sidebar/Column/Body/Execution"]
+layout_mode = 2
+theme_override_constants/separation = 14
+
+[node name="GoalsColumn" type="VBoxContainer" parent="RuntimeWindow/RuntimePanel/Column/Tabs/Agent/Sidebar/Column/Body/Execution/Planning"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 1.1
+theme_override_constants/separation = 8
+
+[node name="GoalHeading" type="Label" parent="RuntimeWindow/RuntimePanel/Column/Tabs/Agent/Sidebar/Column/Body/Execution/Planning/GoalsColumn"]
+layout_mode = 2
+text = "GOALS"
+theme_override_font_sizes/font_size = 13
+theme_override_colors/font_color = Color(0.62, 0.71, 0.8, 1)
+
+[node name="GoalList" type="VBoxContainer" parent="RuntimeWindow/RuntimePanel/Column/Tabs/Agent/Sidebar/Column/Body/Execution/Planning/GoalsColumn"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="PlanColumn" type="VBoxContainer" parent="RuntimeWindow/RuntimePanel/Column/Tabs/Agent/Sidebar/Column/Body/Execution/Planning"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 8
+
+[node name="StepsHeading" type="Label" parent="RuntimeWindow/RuntimePanel/Column/Tabs/Agent/Sidebar/Column/Body/Execution/Planning/PlanColumn"]
+layout_mode = 2
+text = "PLAN"
+theme_override_font_sizes/font_size = 13
+theme_override_colors/font_color = Color(0.62, 0.71, 0.8, 1)
+
+[node name="Steps" type="RichTextLabel" parent="RuntimeWindow/RuntimePanel/Column/Tabs/Agent/Sidebar/Column/Body/Execution/Planning/PlanColumn"]
+layout_mode = 2
+mouse_filter = 2
+text = "No plan"
+bbcode_enabled = true
+fit_content = true
+scroll_active = false
+theme_override_font_sizes/normal_font_size = 15
+theme_override_constants/line_separation = 8
+
+[node name="Performance" type="ScrollContainer" parent="RuntimeWindow/RuntimePanel/Column/Tabs"]
+layout_mode = 2
+horizontal_scroll_mode = 0
+
+[node name="Performance" type="PanelContainer" parent="RuntimeWindow/RuntimePanel/Column/Tabs/Performance"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("Page")
+
+[node name="Column" type="VBoxContainer" parent="RuntimeWindow/RuntimePanel/Column/Tabs/Performance/Performance"]
+layout_mode = 2
+theme_override_constants/separation = 14
+script = ExtResource("1_performance")
+
+[node name="Title" type="Label" parent="RuntimeWindow/RuntimePanel/Column/Tabs/Performance/Performance/Column"]
+layout_mode = 2
+text = "Simulation / Workload"
+theme_override_font_sizes/font_size = 24
+theme_override_colors/font_color = Color(0.9, 0.94, 0.98, 1)
+
+
+[node name="Subtitle" type="Label" parent="RuntimeWindow/RuntimePanel/Column/Tabs/Performance/Performance/Column"]
+layout_mode = 2
+text = "Configure the example population and synthetic planning load"
+theme_override_font_sizes/font_size = 14
+theme_override_colors/font_color = Color(0.62, 0.71, 0.8, 1)
+
+
+[node name="Body" type="HBoxContainer" parent="RuntimeWindow/RuntimePanel/Column/Tabs/Performance/Performance/Column"]
+layout_mode = 2
+theme_override_constants/separation = 14
+
+
+[node name="Settings" type="VBoxContainer" parent="RuntimeWindow/RuntimePanel/Column/Tabs/Performance/Performance/Column/Body"]
+layout_mode = 2
+theme_override_constants/separation = 14
+custom_minimum_size = Vector2(300, 0)
+
+[node name="Heading" type="Label" parent="RuntimeWindow/RuntimePanel/Column/Tabs/Performance/Performance/Column/Body/Settings"]
+layout_mode = 2
+text = "WORKLOAD"
+theme_override_font_sizes/font_size = 13
+theme_override_colors/font_color = Color(0.62, 0.71, 0.8, 1)
+
+
+[node name="Population" type="HBoxContainer" parent="RuntimeWindow/RuntimePanel/Column/Tabs/Performance/Performance/Column/Body/Settings"]
+layout_mode = 2
+theme_override_constants/separation = 14
+
+
+[node name="Label" type="Label" parent="RuntimeWindow/RuntimePanel/Column/Tabs/Performance/Performance/Column/Body/Settings/Population"]
+layout_mode = 2
+text = "Agents"
+theme_override_font_sizes/font_size = 15
+theme_override_colors/font_color = Color(0.9, 0.94, 0.98, 1)
+
+
+[node name="Count" type="SpinBox" parent="RuntimeWindow/RuntimePanel/Column/Tabs/Performance/Performance/Column/Body/Settings/Population"]
+layout_mode = 2
+size_flags_horizontal = 3
+min_value = 1.0
+max_value = 512.0
+value = 12.0
+
+[node name="Apply" type="Button" parent="RuntimeWindow/RuntimePanel/Column/Tabs/Performance/Performance/Column/Body/Settings/Population"]
+layout_mode = 2
+custom_minimum_size = Vector2(0, 36)
+text = "Apply"
+
+[node name="StressMode" type="CheckButton" parent="RuntimeWindow/RuntimePanel/Column/Tabs/Performance/Performance/Column/Body/Settings"]
+layout_mode = 2
+text = "Background stress test"
+tooltip_text = "Apply to start. Survival and stress requests share the scheduler budget."
+
+[node name="Complexity" type="GridContainer" parent="RuntimeWindow/RuntimePanel/Column/Tabs/Performance/Performance/Column/Body/Settings"]
+layout_mode = 2
+theme_override_constants/separation = 14
+columns = 2
+
+[node name="goalsLabel" type="Label" parent="RuntimeWindow/RuntimePanel/Column/Tabs/Performance/Performance/Column/Body/Settings/Complexity"]
+layout_mode = 2
+text = "Goals per agent"
+theme_override_font_sizes/font_size = 14
+theme_override_colors/font_color = Color(0.9, 0.94, 0.98, 1)
+
+
+[node name="goals" type="SpinBox" parent="RuntimeWindow/RuntimePanel/Column/Tabs/Performance/Performance/Column/Body/Settings/Complexity"]
+layout_mode = 2
+size_flags_horizontal = 3
+min_value = 1.0
+max_value = 8.0
+value = 2.0
+
+[node name="stepsLabel" type="Label" parent="RuntimeWindow/RuntimePanel/Column/Tabs/Performance/Performance/Column/Body/Settings/Complexity"]
+layout_mode = 2
+text = "Steps per goal"
+theme_override_font_sizes/font_size = 14
+theme_override_colors/font_color = Color(0.9, 0.94, 0.98, 1)
+
+
+[node name="steps" type="SpinBox" parent="RuntimeWindow/RuntimePanel/Column/Tabs/Performance/Performance/Column/Body/Settings/Complexity"]
+layout_mode = 2
+size_flags_horizontal = 3
+min_value = 1.0
+max_value = 12.0
+value = 5.0
+
+[node name="alternativesLabel" type="Label" parent="RuntimeWindow/RuntimePanel/Column/Tabs/Performance/Performance/Column/Body/Settings/Complexity"]
+layout_mode = 2
+text = "Choices per step"
+theme_override_font_sizes/font_size = 14
+theme_override_colors/font_color = Color(0.9, 0.94, 0.98, 1)
+
+
+[node name="alternatives" type="SpinBox" parent="RuntimeWindow/RuntimePanel/Column/Tabs/Performance/Performance/Column/Body/Settings/Complexity"]
+layout_mode = 2
+size_flags_horizontal = 3
+min_value = 1.0
+max_value = 8.0
+value = 3.0
+
+[node name="limitLabel" type="Label" parent="RuntimeWindow/RuntimePanel/Column/Tabs/Performance/Performance/Column/Body/Settings/Complexity"]
+layout_mode = 2
+text = "Node limit"
+theme_override_font_sizes/font_size = 14
+theme_override_colors/font_color = Color(0.9, 0.94, 0.98, 1)
+
+
+[node name="limit" type="SpinBox" parent="RuntimeWindow/RuntimePanel/Column/Tabs/Performance/Performance/Column/Body/Settings/Complexity"]
+layout_mode = 2
+size_flags_horizontal = 3
+min_value = 1.0
+max_value = 100000.0
+value = 10000.0
+
+[node name="ConfigNote" type="Label" parent="RuntimeWindow/RuntimePanel/Column/Tabs/Performance/Performance/Column/Body/Settings"]
+layout_mode = 2
+text = "Apply after editing the workload.\nAgents keep their survival plans."
+theme_override_font_sizes/font_size = 13
+theme_override_colors/font_color = Color(0.62, 0.71, 0.8, 1)
+
+
+[node name="Actions" type="VBoxContainer" parent="RuntimeWindow/RuntimePanel/Column/Tabs/Performance/Performance/Column/Body/Settings"]
+layout_mode = 2
+theme_override_constants/separation = 14
+
+
+[node name="Replan" type="Button" parent="RuntimeWindow/RuntimePanel/Column/Tabs/Performance/Performance/Column/Body/Settings/Actions"]
+layout_mode = 2
+custom_minimum_size = Vector2(0, 36)
+text = "Replan all agents"
+
+[node name="Clear" type="Button" parent="RuntimeWindow/RuntimePanel/Column/Tabs/Performance/Performance/Column/Body/Settings/Actions"]
+layout_mode = 2
+custom_minimum_size = Vector2(0, 36)
+text = "Restart workload"
+
+[node name="Console" type="CheckButton" parent="RuntimeWindow/RuntimePanel/Column/Tabs/Performance/Performance/Column/Body/Settings"]
+layout_mode = 2
+text = "Log every 2 seconds"
+visible = false
+button_pressed = false
+
+[node name="Note" type="Label" parent="RuntimeWindow/RuntimePanel/Column/Tabs/Performance/Performance/Column/Body/Settings"]
+layout_mode = 2
+text = "GOAP → Runtime → Performance in the editor shows shared planning metrics.\nThis page shows only the example's synthetic workload progress."
+theme_override_font_sizes/font_size = 13
+theme_override_colors/font_color = Color(0.62, 0.71, 0.8, 1)
+
+
+[node name="Divider" type="VSeparator" parent="RuntimeWindow/RuntimePanel/Column/Tabs/Performance/Performance/Column/Body"]
+layout_mode = 2
+visible = false
+
+[node name="Results" type="VBoxContainer" parent="RuntimeWindow/RuntimePanel/Column/Tabs/Performance/Performance/Column/Body"]
+layout_mode = 2
+visible = false
+theme_override_constants/separation = 14
+size_flags_horizontal = 3
+
+[node name="Metrics" type="VBoxContainer" parent="RuntimeWindow/RuntimePanel/Column/Tabs/Performance/Performance/Column/Body/Results"]
+layout_mode = 2
+theme_override_constants/separation = 14
+
+

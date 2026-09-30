@@ -1,22 +1,27 @@
 class_name GoapGoal
+extends RefCounted
 
-var name := _get_name()
-var desired_state := _get_desired_state()
-
-
-func _get_name() -> String:
-	return "UNNAMEED"
+var name: String = _get_name()
+var goal_state: GoapWorldState = _get_goal_state()
 
 
-func is_valid(current_state: GoapWorldState) -> bool:
+func get_id() -> String:
+	return name
+
+
+func is_valid(_state: GoapWorldState) -> bool:
 	return true
 
 
-func get_priority() -> int:
-	return 0
+func get_priority(_state: GoapWorldState) -> float:
+	return 1.0
 
 
-func _get_desired_state() -> GoapWorldState:
+func _get_name() -> String:
+	return "UNNAMED"
+
+
+func _get_goal_state() -> GoapWorldState:
 	return GoapWorldState.new()
 
 

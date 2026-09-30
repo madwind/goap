@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="" format=3]
+
+[ext_resource type="Script" path="res://goap_example/resources/item_definition.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+kind = &"meat"
+inventory_key = &"raw_meat"
+title = "Raw meat"
+color = Color(0.89, 0.52, 0.56, 1)

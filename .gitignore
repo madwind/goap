@@ -17,3 +17,7 @@ export_presets.cfg
 data_*/
 mono_crash.*.json
 /.idea/
+/test-results/
+
+# Local agent output
+/.codex/

@@ -1,0 +1,64 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://goap_example/resources/resource.gd" id="1_nn3wb"]
+[ext_resource type="Script" path="res://goap_example/resources/item_definition.gd" id="2_item"]
+[ext_resource type="Resource" path="res://goap_example/resources/wood.tres" id="3_drop"]
+[ext_resource type="Script" path="res://goap_example/resources/resource_state_provider.gd" id="4_provider"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_dk3rn"]
+albedo_color = Color(0.53333336, 0.41960785, 0.30588236, 1)
+roughness = 0.85
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_j6cid"]
+top_radius = 0.18
+bottom_radius = 0.24
+height = 1.6
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_3hfmm"]
+albedo_color = Color(0.39607844, 0.654902, 0.5019608, 1)
+roughness = 0.85
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_wc08m"]
+top_radius = 0.0
+bottom_radius = 0.95
+height = 2.2
+
+[sub_resource type="CylinderShape3D" id="Collision"]
+radius = 0.24
+height = 1.6
+
+[node name="Tree" type="Node3D" unique_id=42728477]
+script = ExtResource("1_nn3wb")
+harvest_method = &"chop"
+drops = Array[ExtResource("2_item")]([ExtResource("3_drop")])
+
+[node name="WorldStateProvider" type="Node" parent="."]
+script = ExtResource("4_provider")
+
+[node name="Visual" type="Node3D" parent="." unique_id=1044077159]
+
+[node name="Collider" type="StaticBody3D" parent="."]
+collision_mask = 0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Collider"]
+position = Vector3(0, 0.8, 0)
+shape = SubResource("Collision")
+
+[node name="Trunk" type="MeshInstance3D" parent="Visual" unique_id=84617201]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8, 0)
+material_override = SubResource("StandardMaterial3D_dk3rn")
+mesh = SubResource("CylinderMesh_j6cid")
+
+[node name="Crown" type="MeshInstance3D" parent="Visual" unique_id=44332472]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.1, 0)
+material_override = SubResource("StandardMaterial3D_3hfmm")
+mesh = SubResource("CylinderMesh_wc08m")
+
+[node name="Caption" type="Label3D" parent="." unique_id=1742120500]
+visible = false
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.5, 0)
+pixel_size = 0.012
+billboard = 1
+no_depth_test = true
+font_size = 48
+outline_size = 9

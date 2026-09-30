@@ -1,55 +1,112 @@
 class_name GoapWorldState
+extends RefCounted
+## Boolean planning data, independent of scene objects and observation providers.
 
-var _state: Dictionary[StringName, bool] = {}
 signal state_changed
+var _state: Dictionary[StringName, bool] = {}
+var _snapshot: Dictionary[StringName, bool] = {}
+var _snapshot_dirty := true
+
+
+## Structural key: preserve explicit false constraints in partial definitions.
+static func key_for(data: Dictionary[StringName, bool]) -> String:
+	var ordered := data.keys()
+	ordered.sort()
+	var parts := PackedStringArray()
+	for key in ordered:
+		# Length prefix prevents collisions for names containing separators.
+		parts.append("%d:%s=%d" % [key.length(), key, int(data[key])])
+	return "|".join(parts)
 
 
 func _init(state: Dictionary[StringName, bool] = {}) -> void:
-	_state = state
+	_state = state.duplicate()
 
 
 func set_state(key: StringName, value: bool) -> void:
-	if _state.get(key) != value:
-		_state.set(key, value)
-		state_changed.emit()
+	if not _state.has(key) or _state[key] != value:
+		var changed := get_state(key) != value
+		_state[key] = value
+		_snapshot_dirty = true
+		if changed:
+			state_changed.emit()
 
 
-func get_state(key: StringName, default: Variant = null) -> Variant:
-	return _state.get(key, default)
+## Unprovided facts are false.
+func get_state(key: StringName) -> bool:
+	return _state.get(key, false)
 
 
-func contains(other_state: GoapWorldState) -> bool:
-	for key: StringName in other_state.keys():
-		if _state.get(key) != other_state.get(key):
+## Whether a partial definition explicitly specifies this fact.
+func has_state(key: StringName) -> bool:
+	return _state.has(key)
+
+
+func satisfies(other: GoapWorldState) -> bool:
+	for key in other._state:
+		if get_state(key) != other._state[key]:
 			return false
 	return true
 
 
-func get_unsatisfied_goals(goal_state: GoapWorldState) -> GoapWorldState:
-	var unsatisfied_state: Dictionary[StringName, bool] = {}
-	for key in goal_state.keys():
-		if get_state(key) != goal_state.get_state(key):
-			unsatisfied_state.set(key, goal_state.get_state(key))
-	return GoapWorldState.new(unsatisfied_state)
+func conflicts(other: GoapWorldState) -> bool:
+	for key in other.keys():
+		if _state.has(key) and _state[key] != other._state[key]:
+			return true
+	return false
 
 
-func merge(other_state: GoapWorldState, emit_change := false) -> void:
-	var should_emit_change = false
-	if emit_change:
-		should_emit_change = not contains(other_state)
-	_state.merge(other_state._state, true)
-	if should_emit_change:
+## Requirements in this state not satisfied by other; missing facts are false.
+func difference(other: GoapWorldState) -> GoapWorldState:
+	var result := GoapWorldState.new()
+	for key in keys():
+		if _state[key] != other.get_state(key):
+			result._state[key] = _state[key]
+	return result
+
+
+func merge(other: GoapWorldState, emit_change := true) -> void:
+	var changed := not satisfies(other)
+	for key in other._state:
+		if not _state.has(key) or _state[key] != other._state[key]:
+			_state[key] = other._state[key]
+			_snapshot_dirty = true
+	if changed and emit_change:
 		state_changed.emit()
 
 
 func duplicate() -> GoapWorldState:
-	return GoapWorldState.new(_state.duplicate())
+	return GoapWorldState.new(_state)
 
 
-func match_first(other_state: GoapWorldState) -> bool:
-	for key in other_state.keys():
-		return get_state(key) == other_state.get_state(key)
-	return false
+## Publish a complete observation atomically. Facts no longer observed disappear
+## (and therefore read as false). Existing immutable snapshots remain valid.
+func replace(other: GoapWorldState) -> void:
+	var data := other.to_dictionary()
+	if _state == data:
+		return
+	var changed := not satisfies(other) or not other.satisfies(self)
+	_state = data
+	_snapshot_dirty = true
+	if changed:
+		state_changed.emit()
+
+
+func to_dictionary() -> Dictionary[StringName, bool]:
+	return _state.duplicate()
+
+
+## Immutable planning view, rebuilt only after a fact changes. Old views remain valid.
+func snapshot() -> Dictionary[StringName, bool]:
+	if _snapshot_dirty:
+		_snapshot = _state.duplicate()
+		_snapshot.make_read_only()
+		_snapshot_dirty = false
+	return _snapshot
+
+
+func get_key() -> String:
+	return key_for(_state)
 
 
 func size() -> int:
@@ -57,7 +114,9 @@ func size() -> int:
 
 
 func keys() -> Array[StringName]:
-	return _state.keys()
+	var result := _state.keys()
+	result.sort()
+	return result
 
 
 func _to_string() -> String:

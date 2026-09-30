@@ -1,0 +1,36 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://goap_example/resources/resource.gd" id="1_le7u3"]
+[ext_resource type="Resource" path="res://goap_example/resources/raw_meat.tres" id="2_item"]
+[ext_resource type="Script" path="res://goap_example/resources/resource_state_provider.gd" id="4_provider"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_sx70x"]
+albedo_color = Color(0.8901961, 0.5176471, 0.56078434, 1)
+roughness = 0.85
+
+[sub_resource type="BoxMesh" id="BoxMesh_b6156"]
+size = Vector3(0.65, 0.3, 0.5)
+
+[node name="Meat" type="Node3D" unique_id=1466534428]
+script = ExtResource("1_le7u3")
+kind = &"meat"
+item = ExtResource("2_item")
+
+[node name="WorldStateProvider" type="Node" parent="."]
+script = ExtResource("4_provider")
+
+[node name="Visual" type="Node3D" parent="." unique_id=869361806]
+
+[node name="Meat" type="MeshInstance3D" parent="Visual" unique_id=986223657]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.25, 0)
+material_override = SubResource("StandardMaterial3D_sx70x")
+mesh = SubResource("BoxMesh_b6156")
+
+[node name="Caption" type="Label3D" parent="." unique_id=824790695]
+visible = false
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.8, 0)
+pixel_size = 0.012
+billboard = 1
+no_depth_test = true
+font_size = 48
+outline_size = 9

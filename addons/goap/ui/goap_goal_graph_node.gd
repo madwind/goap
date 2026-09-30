@@ -2,10 +2,19 @@ class_name GoapGoalGraphNode
 extends GoapBaseGraphNode
 
 
-func _init(goal: GoapGoal) -> void:
-	super._init(goal.name, goal.get_script())
-	for key in goal.desired_state.keys():
-		add_child(new_state(key, goal.desired_state.get_state(key)))
-	set_slot_enabled_right(0, true)
-	set_slot_type_right(0, TYPE_BOOL)
-	set_color(GoapTheme.COLOR_DISABLED)
+func _init(goal: GoapGoal, world: GoapWorldState) -> void:
+	super._init(goal.name, GoapTheme.definition_script(goal))
+	custom_minimum_size.x = 280
+	var status := Label.new()
+	status.text = "Goal reached" if world.satisfies(goal.goal_state) else "Goal"
+	add_child(status)
+	add_section("Desired state")
+	if goal.goal_state.size() == 0:
+		var label := Label.new()
+		label.text = "No conditions"
+		add_child(label)
+	else:
+		add_facts(goal.goal_state, world, "requirements")
+	set_color(
+		GoapTheme.COLOR_SUCCESS if world.satisfies(goal.goal_state) else GoapTheme.COLOR_ACTIVE
+	)

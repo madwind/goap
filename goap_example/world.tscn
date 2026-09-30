@@ -1,84 +1,94 @@
-[gd_scene load_steps=11 format=3 uid="uid://ox234coc43h3"]
+[gd_scene format=3 uid="uid://ox234coc43h3"]
 
-[ext_resource type="PackedScene" uid="uid://6vtt7k1riagu" path="res://goap_example/enemy/enemy.tscn" id="1_yem5u"]
-[ext_resource type="PackedScene" uid="uid://bc8jinjqeernr" path="res://goap_example/player/player.tscn" id="2_lupes"]
+[ext_resource type="Script" uid="uid://17qhgvc6kyvb" path="res://goap_example/world.gd" id="1"]
+[ext_resource type="PackedScene" uid="uid://6vtt7k1riagu" path="res://goap_example/agent/agent.tscn" id="2"]
+[ext_resource type="PackedScene" path="res://goap_example/environment.tscn" id="4_environment"]
+[ext_resource type="PackedScene" path="res://goap_example/campfire.tscn" id="5_camp"]
+[ext_resource type="PackedScene" path="res://goap_example/resources/tree.tscn" id="6_tree"]
+[ext_resource type="PackedScene" path="res://goap_example/resources/animal.tscn" id="7_animal"]
+[ext_resource type="PackedScene" path="res://goap_example/hud.tscn" id="8_hud"]
+[ext_resource type="PackedScene" path="res://goap_example/resources/spring.tscn" id="9_spring"]
+[ext_resource type="PackedScene" path="res://goap_example/resources/stone.tscn" id="10_stone"]
+[ext_resource type="Script" uid="uid://30tr6longqtn" path="res://goap_example/camp_fence.gd" id="11_fence"]
 
-[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_yem5u"]
-sky_horizon_color = Color(0.662243, 0.671743, 0.686743, 1)
-ground_horizon_color = Color(0.662243, 0.671743, 0.686743, 1)
+[node name="World" type="Node3D" unique_id=115547473]
+script = ExtResource("1")
 
-[sub_resource type="Sky" id="Sky_lupes"]
-sky_material = SubResource("ProceduralSkyMaterial_yem5u")
+[node name="Environment" parent="." unique_id=1107112504 instance=ExtResource("4_environment")]
 
-[sub_resource type="Environment" id="Environment_18osm"]
-background_mode = 2
-sky = SubResource("Sky_lupes")
-tonemap_mode = 2
-glow_enabled = true
+[node name="Campfire" parent="." unique_id=2128934592 instance=ExtResource("5_camp")]
+transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, -1, 0, -3)
 
-[sub_resource type="NavigationMesh" id="NavigationMesh_lupes"]
-vertices = PackedVector3Array(-24.5, 0.5, -25.5233, -24.5, 0.5, 23.4767, 24.5, 0.5, 23.4767, 24.5, 0.5, -25.5233)
-polygons = [PackedInt32Array(3, 2, 0), PackedInt32Array(0, 2, 1)]
+[node name="CampFence" type="Node3D" parent="." unique_id=608146372]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0, -3)
+script = ExtResource("11_fence")
 
-[sub_resource type="PlaneMesh" id="PlaneMesh_lupes"]
-size = Vector2(50, 50)
+[node name="Tree1" parent="." unique_id=1220223740 instance=ExtResource("6_tree")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -13, 0, -3)
 
-[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_yem5u"]
-points = PackedVector3Array(-25, 0, -25, -25, 0, 25, 25, 0, -25, 25, 0, 25)
+[node name="Tree3" parent="." unique_id=474665361 instance=ExtResource("6_tree")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 0, 6)
 
-[sub_resource type="CylinderMesh" id="CylinderMesh_lupes"]
-top_radius = 0.1
-bottom_radius = 0.1
+[node name="Tree4" parent="." unique_id=959916587 instance=ExtResource("6_tree")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12, 0, 7)
 
-[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_18osm"]
-points = PackedVector3Array(-0.1, -1, 0, -0.0995302, -1, -0.00980815, -0.0995302, -1, 0.00978857, -0.1, 1, 0, -0.0980814, -1, -0.0195184, -0.0995302, 1, -0.00980815, -0.0980814, -1, 0.0194988, -0.0995302, 1, 0.00978857, -0.0957126, -1, -0.0290329, -0.0980814, 1, -0.0195184, -0.0957126, -1, 0.0290133, -0.0980814, 1, 0.0194988, -0.0924041, -1, -0.0382733, -0.0957126, 1, -0.0290329, -0.0924041, -1, 0.0382537, -0.0957126, 1, 0.0290133, -0.088195, -1, -0.0471417, -0.0924041, 1, -0.0382733, -0.088195, -1, 0.0471222, -0.0924041, 1, 0.0382537, -0.0831637, -1, -0.0555599, -0.088195, 1, -0.0471417, -0.0831637, -1, 0.0555403, -0.088195, 1, 0.0471222, -0.0773101, -1, -0.0634495, -0.0831637, 1, -0.0555599, -0.0773101, -1, 0.0634299, -0.0831637, 1, 0.0555403, -0.0707126, -1, -0.0707126, -0.0773101, 1, -0.0634495, -0.0707126, -1, 0.070693, -0.0773101, 1, 0.0634299, -0.0634495, -1, -0.0773101, -0.0707126, 1, -0.0707126, -0.0634495, -1, 0.0772905, -0.0707126, 1, 0.070693, -0.0555599, -1, -0.0831637, -0.0634495, 1, -0.0773101, -0.0555599, -1, 0.0831441, -0.0634495, 1, 0.0772905, -0.0471417, -1, -0.088195, -0.0555599, 1, -0.0831637, -0.0471417, -1, 0.0881754, -0.0555599, 1, 0.0831441, -0.0382733, -1, -0.0924041, -0.0471417, 1, -0.088195, -0.0382733, -1, 0.0923845, -0.0471417, 1, 0.0881754, -0.0290329, -1, -0.0957126, -0.0382733, 1, -0.0924041, -0.0290329, -1, 0.095693, -0.0382733, 1, 0.0923845, -0.0195184, -1, -0.0980814, -0.0290329, 1, -0.0957126, -0.0195184, -1, 0.0980619, -0.0290329, 1, 0.095693, -0.00980815, -1, -0.0995302, -0.0195184, 1, -0.0980814, -0.00980815, -1, 0.0995106, -0.0195184, 1, 0.0980619, 0, -1, -0.1, -0.00980815, 1, -0.0995302, 0, -1, 0.1, -0.00980815, 1, 0.0995106, 0.00978857, -1, -0.0995302, 0, 1, -0.1, 0.00978857, -1, 0.0995106, 0, 1, 0.1, 0.0194988, -1, -0.0980814, 0.00978857, 1, -0.0995302, 0.0194988, -1, 0.0980619, 0.00978857, 1, 0.0995106, 0.0290133, -1, -0.0957126, 0.0194988, 1, -0.0980814, 0.0290133, -1, 0.095693, 0.0194988, 1, 0.0980619, 0.0382537, -1, -0.0924041, 0.0290133, 1, -0.0957126, 0.0382537, -1, 0.0923845, 0.0290133, 1, 0.095693, 0.0471222, -1, -0.088195, 0.0382537, 1, -0.0924041, 0.0471222, -1, 0.0881754, 0.0382537, 1, 0.0923845, 0.0555403, -1, -0.0831637, 0.0471222, 1, -0.088195, 0.0555403, -1, 0.0831441, 0.0471222, 1, 0.0881754, 0.0634299, -1, -0.0773101, 0.0555403, 1, -0.0831637, 0.0634299, -1, 0.0772905, 0.0555403, 1, 0.0831441, 0.070693, -1, -0.0707126, 0.0634299, 1, -0.0773101, 0.070693, -1, 0.070693, 0.0634299, 1, 0.0772905, 0.0772905, -1, -0.0634495, 0.070693, 1, -0.0707126, 0.0772905, -1, 0.0634299, 0.070693, 1, 0.070693, 0.0831441, -1, -0.0555599, 0.0772905, 1, -0.0634495, 0.0831441, -1, 0.0555403, 0.0772905, 1, 0.0634299, 0.0881754, -1, -0.0471417, 0.0831441, 1, -0.0555599, 0.0881754, -1, 0.0471222, 0.0831441, 1, 0.0555403, 0.0923845, -1, -0.0382733, 0.0881754, 1, -0.0471417, 0.0923845, -1, 0.0382537, 0.0881754, 1, 0.0471222, 0.095693, -1, -0.0290329, 0.0923845, 1, -0.0382733, 0.095693, -1, 0.0290133, 0.0923845, 1, 0.0382537, 0.0980619, -1, -0.0195184, 0.095693, 1, -0.0290329, 0.0980619, -1, 0.0194988, 0.095693, 1, 0.0290133, 0.0995106, -1, -0.00980815, 0.0980619, 1, -0.0195184, 0.0995106, -1, 0.00978857, 0.0980619, 1, 0.0194988, 0.1, -1, 0, 0.0995106, 1, -0.00980815, 0.0995106, 1, 0.00978857, 0.1, 1, 0)
+[node name="Tree5" parent="." unique_id=973506540 instance=ExtResource("6_tree")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13, 0, 4)
 
-[node name="World" type="Node3D"]
+[node name="Tree6" parent="." unique_id=1916325774 instance=ExtResource("6_tree")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 0, -9)
 
-[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
-transform = Transform3D(-0.866023, -0.433016, 0.250001, 0, 0.499998, 0.866027, -0.500003, 0.749999, -0.43301, 0, 0, 0)
-light_color = Color(0.4553, 0.4553, 0.4553, 1)
-shadow_enabled = true
+[node name="Stone1" parent="." unique_id=1724210507 instance=ExtResource("10_stone")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11, 0, -11)
 
-[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
-environment = SubResource("Environment_18osm")
+[node name="Stone2" parent="." unique_id=543897009 instance=ExtResource("10_stone")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9, 0, 8)
 
-[node name="Enemy" parent="." instance=ExtResource("1_yem5u")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -9.99424)
-collision_layer = 2
-collision_mask = 8
+[node name="Stone3" parent="." unique_id=987082357 instance=ExtResource("10_stone")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14, 0, -9)
 
-[node name="Player" parent="." instance=ExtResource("2_lupes")]
-collision_mask = 8
+[node name="Animal1" parent="." unique_id=861007758 instance=ExtResource("7_animal")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0, -15)
 
-[node name="NavigationRegion3D" type="NavigationRegion3D" parent="."]
-navigation_mesh = SubResource("NavigationMesh_lupes")
+[node name="Animal2" parent="." unique_id=1752285072 instance=ExtResource("7_animal")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11, 0, 2)
 
-[node name="StaticBody3D" type="StaticBody3D" parent="NavigationRegion3D"]
-collision_layer = 8
-collision_mask = 0
+[node name="Animal3" parent="." unique_id=1155295657 instance=ExtResource("7_animal")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 9)
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="NavigationRegion3D/StaticBody3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.02334)
-mesh = SubResource("PlaneMesh_lupes")
-skeleton = NodePath("../../..")
+[node name="Spring1" parent="." unique_id=1674294336 instance=ExtResource("9_spring")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10, 0, 4)
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/StaticBody3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.02334)
-shape = SubResource("ConvexPolygonShape3D_yem5u")
+[node name="Spring2" parent="." unique_id=1324833140 instance=ExtResource("9_spring")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11, 0, -5)
 
-[node name="Camera3D" type="Camera3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 0.5, 0.866025, 0, -0.866025, 0.5, 0, 10, 0)
+[node name="Agent" parent="." unique_id=1878365408 instance=ExtResource("2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 0, 0)
 
-[node name="Stick" type="StaticBody3D" parent="." groups=["weapon"]]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10.9746, 0, -7.49552)
-collision_layer = 4
-collision_mask = 8
+[node name="HUD" parent="." unique_id=1102451559 instance=ExtResource("8_hud")]
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Stick"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
-mesh = SubResource("CylinderMesh_lupes")
+[node name="Tabs" parent="HUD/RuntimeWindow/RuntimePanel/Column" index="1"]
+current_tab = 0
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Stick"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
-shape = SubResource("ConvexPolygonShape3D_18osm")
+[node name="Agent" parent="HUD/RuntimeWindow/RuntimePanel/Column/Tabs" index="1"]
+metadata/_tab_index = 0
+
+[node name="Performance" parent="HUD/RuntimeWindow/RuntimePanel/Column/Tabs" index="2"]
+visible = false
+metadata/_tab_index = 1
+
+[node name="Root" parent="HUD" index="1"]
+layout_mode = 3
+
+[node name="Overlay" parent="HUD/Root" index="0"]
+anchors_preset = 0
+
+[node name="WorldHealthBars" parent="HUD/Root" index="1"]
+anchors_preset = 0
+
+[node name="Toolbar" parent="HUD/Root" index="2"]
+layout_mode = 0
+offset_left = 0.0
+offset_top = 0.0
+
+[editable path="HUD"]
